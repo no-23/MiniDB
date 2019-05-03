@@ -6,22 +6,24 @@ import static java.lang.System.exit;
 
 public class StudentManager {
     //暂存姓名、出生日期和性别等，还有全局变量
-    private UI ui = new UI();
     private String name = "";
     private String date = "";
     private Integer id = 0;
     private boolean gender = true;
-    private Student[] s = null;
-
+    private Student[] students = null;
+    //生成UI对象
+    private UI ui = new UI();
+    //允许加入的最大数据量
     private int maxNum = 20;
     private Scanner input = new Scanner(System.in);
+    //按学号升序插入
     private Map<Integer, Student> database = new TreeMap<Integer, Student>(new Comparator<Integer>() {
         @Override
         public int compare(Integer o1, Integer o2) {
             return o1-o2;
         }
     });
-    //insert
+    //insert，arguments:id, name, birthday, gender
     public void insert(int id, String name, String birDate, boolean gender) throws Exception {
         //string such as "19970808"
         if(database.size() == 20){
@@ -40,19 +42,19 @@ public class StudentManager {
     }
     //find
     public Student[] find(String name) throws Exception {
-        Student[] s = new Student[20];
+        students = new Student[20];
         int i = 0;
-        boolean notFound = true;
-        for(Student s1: database.values()){
-            if(name.equals(s1.getName())){
-                s[i++] = s1;
-                notFound = false;
+        boolean hasNotFound = true;
+        for(Student s: database.values()){
+            if(name.equals(s.getName())){
+                students[i++] = s;
+                hasNotFound = false;
             }
         }
-        if(notFound){
+        if(hasNotFound){
             throw new Exception("找不到姓名为 '"+name+"'的学生数据！");
         }
-        return s;
+        return students;
     }
     //delete
     public void delete(int id) throws Exception {
@@ -79,16 +81,15 @@ public class StudentManager {
 
     //list name-search-lists return the number of the search result
     public int listMsg(String name) throws Exception {
-        Student[] s = null;
         int count = 0;
         int id;
         try{
-            s = find(name);
-            for(Student s1: s){
-                if(s1 != null){
+            students = find(name);
+            for(Student s: students){
+                if(s != null){
                     count ++;
-                    System.out.println("id:" + s1.getID() + "\t姓名：" + s1.getName() + "\t生日：" + new SimpleDateFormat("yyyy年MM月dd日").format(s1.getBirDate()) +
-                            "\t性别: " + (s1.getGender() ? "男" : "女"));
+                    System.out.println("id:" + s.getID() + "\t姓名：" + s.getName() + "\t生日：" + new SimpleDateFormat("yyyy年MM月dd日").format(s.getBirDate()) +
+                            "\t性别: " + (s.getGender() ? "男" : "女"));
                 }
             }
         }catch (Exception e){
@@ -103,7 +104,7 @@ public class StudentManager {
                 throw new Exception("输入类型异常，返回主菜单！");
             }
         }else if(count == 1){
-            id = s[0].getID();
+            id = students[0].getID();
         } else{
             throw new Exception("找不到姓名为 '"+name+"'的学生数据！");
         }
@@ -111,6 +112,7 @@ public class StudentManager {
     }
 
     public void getMsg() throws Exception {
+        //t represents gender, male--1 and others--female
         int t;
         try{
             System.out.print("请输入学生ID:");
@@ -153,7 +155,7 @@ public class StudentManager {
                 input.nextLine();
             }
             switch (choose) {
-                //insert
+                //insert part
                 case 1:
                     ui.cls();
                     try{
@@ -172,17 +174,17 @@ public class StudentManager {
                         continue;
                     }
                     break;
-                //find
+                //find part
                 case 2:
                     ui.cls();
                     System.out.print("请输入要查找的学生姓名：");
                     name = input.next();
                     try{
-                        s = find(name);
-                        for(Student s1: s){
-                            if(s1 != null){
-                                System.out.println("ID:"+ s1.getID() + "\t姓名：" + s1.getName() + "\t生日：" + new SimpleDateFormat("yyyy年MM月dd日").format(s1.getBirDate()) +
-                                        "\t性别: " + (s1.getGender() ? "男" : "女"));
+                        students = find(name);
+                        for(Student s: students){
+                            if(s != null){
+                                System.out.println("ID:"+ s.getID() + "\t姓名：" + s.getName() + "\t生日：" + new SimpleDateFormat("yyyy年MM月dd日").format(s.getBirDate()) +
+                                        "\t性别: " + (s.getGender() ? "男" : "女"));
                             }
                         }
 
@@ -192,7 +194,7 @@ public class StudentManager {
                         continue;
                     }
                     break;
-                //delete
+                //delete part
                 case 3:
                     ui.cls();
 
@@ -214,7 +216,7 @@ public class StudentManager {
                         continue;
                     }
                     break;
-                //modify
+                //modify part
                 case 4:
                     ui.cls();
                     System.out.println("请输入要修改的学生姓名:");
@@ -243,19 +245,19 @@ public class StudentManager {
                 }
                 System.out.println("修改成功！");
                 break;
-                //display all
+                //display part
                 case 5:
                     ui.cls();
                     System.out.println("显示全部学生数据：");
                     if(database.size()==0){
                         System.out.println("无数据！");
                     }
-                    for(Student s_out: database.values()){
-                        System.out.println("id:" + s_out.getID() + "\t姓名：" + s_out.getName() + "\t生日：" + new SimpleDateFormat("yyyy年MM月dd日").format(s_out.getBirDate()) +
-                                "\t性别: " + (s_out.getGender() ? "男" : "女"));
+                    for(Student s: database.values()){
+                        System.out.println("id:" + s.getID() + "\t姓名：" + s.getName() + "\t生日：" + new SimpleDateFormat("yyyy年MM月dd日").format(s.getBirDate()) +
+                                "\t性别: " + (s.getGender() ? "男" : "女"));
                     }
                 break;
-                //exit program
+                //exit program part
                 case 6:
                     ui.cls();
                     System.out.println("3秒后退出！");

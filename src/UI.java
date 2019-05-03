@@ -9,7 +9,7 @@ public class UI {
             "*                           4  修改                                  *\n"+
             "*                           5  输出                                  *\n"+
             "*                           6  退出                                  *\n"+
-            "**********************************************************************\n"+ "请选择操作(数字1~6)：\n";
+            "**********************************************************************\n"+ "请选择操作(数字1~6):\n";
 
     public void cls(){
         try{
@@ -22,9 +22,10 @@ public class UI {
 
     public void waitKey(){
         System.out.println("****************************");
-        System.out.println("按回车键继续！");
+        System.out.println("按回车键继续!");
         new Scanner(System.in).nextLine();
     }
+
     public void displayMenu(){
         System.out.print(menu);
     }
